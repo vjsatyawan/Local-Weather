@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<head>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+</head>
+<script>
+ 
+   var cTemp;
+   var fTemp;
+   var tog = 0;
+$(document).ready(function(){
+var lat;
+  var lon;
+ if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(function(position) {
+   lat = position.coords.latitude;
+    lon = position.coords.longitude;
+    $("#data").html("latitude: " + position.coords.latitude + "<br>longitude: " + position.coords.longitude);
+
+
+  
+   var api = 'http://api.openweathermap.org/data/2.5/weather?lat='+lat+'&lon='+lon+'&appid=818c4a9faebd7d90d8420317b537c303';
+
+  $.getJSON(api, function(data){
+    //var city;
+    var kTemp = data.main.temp; 
+    cTemp = kTemp-273.15;    
+    fTemp = (kTemp)*(9/5) - 459.67 ;
+    city = data.name;
+    console.log(cTemp);
+    console.log(fTemp);
+    console.log(city);
+
+//cTemp = 25;
+$("#city").html(city);
+$("#temp").html(cTemp);
+
+if (cTemp > 30) {
+	$("body").css("background-color","red");
+}
+else if(cTemp < 15)
+{
+	$("body").css("background-color","blue");
+}
+else{
+
+	$("body").css("background-color","green");
+}
+
+
+
+  });
+
+
+  });
+}
+ 
+
+  
+  
+  });
+
+
+function toggleTemp() {
+    if(tog ==0)
+    {
+		$("#temp").html(fTemp);
+		tog = 1;
+    }
+    else{
+    	$("#temp").html(cTemp);
+    	tog = 0;
+    }
+}
+
+</script>
+
+
+<body>
+
+<div id = "data">
+  <h4>You are here:</h4>
+  
+</div>
+
+<ul>
+	<li id="city"></li>
+	<li id="temp"></li>
+
+</ul>
+
+
+<button onclick="toggleTemp()"> Toggle </button> 
+
+</div>
+</body>
+</html>
